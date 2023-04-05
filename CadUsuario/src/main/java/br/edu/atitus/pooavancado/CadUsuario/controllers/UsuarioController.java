@@ -63,21 +63,13 @@ public class UsuarioController {
 		return ResponseEntity.status(HttpStatus.OK).body("Usuário com Id " + id + " deletado com sucesso!");
 	}
 	
-	
-	
-	
-	
-	
 	@PatchMapping("/status/{id}")
 	public ResponseEntity<Object> alteraStatusUsuario(@PathVariable long id) {
+		usuarioRepository.alteraStatusById(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Status alteado com sucesso para o usuario com Id " + id);
 	}
 	
 	
-	
-	
-	
-	
-	
+		
 
 }
