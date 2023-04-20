@@ -3,6 +3,8 @@ package br.edu.atitus.pooavancado.CadUsuario.servicesimpl;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.edu.atitus.pooavancado.CadUsuario.Entities.Usuario;
@@ -31,8 +33,8 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 
 	@Override
-	public List<Usuario> findByNome(String nome) {
-		return usuarioRepository.findByNomeContainingIgnoreCase(nome);
+	public Page<Usuario> findByNome(Pageable pageable, String nome) {
+		return usuarioRepository.findByNomeContainingIgnoreCase(pageable, nome);
 	}
 
 	@Override
@@ -46,7 +48,9 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 
 	@Override
-	public void alteraStatus(long id) {
+	public void alteraStatus(long id) throws Exception {
+		if (!usuarioRepository.existsById(id))
+			throw new Exception("Não existe usuário com este Id");
 		usuarioRepository.alteraStatusById(id);
 	}
 	

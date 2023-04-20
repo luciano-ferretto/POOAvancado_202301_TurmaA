@@ -2,6 +2,8 @@ package br.edu.atitus.pooavancado.CadUsuario.repositories;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,7 +21,7 @@ public interface UsuarioRespository extends JpaRepository<Usuario, Long>{
 	@Transactional
 	void alteraStatusById(@Param("ident") long id);
 
-	List<Usuario> findByNomeContainingIgnoreCase(String nome);
+	Page<Usuario> findByNomeContainingIgnoreCase(Pageable pageable, String nome);
 	
 	List<Usuario> findByEmailContainingIgnoreCase(String email);
 	

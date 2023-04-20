@@ -10,7 +10,6 @@ import br.edu.atitus.pooavancado.CadUsuario.Entities.Departamento;
 @Repository
 public interface DepartamentoRespository extends JpaRepository<Departamento, Long>{
 	
-
 	List<Departamento> findByNomeContainingIgnoreCase(String nome);
 	
 }
