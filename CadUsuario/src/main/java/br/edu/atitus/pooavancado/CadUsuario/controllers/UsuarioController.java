@@ -20,56 +20,63 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.atitus.pooavancado.CadUsuario.Entities.Usuario;
 import br.edu.atitus.pooavancado.CadUsuario.repositories.UsuarioRespository;
+import br.edu.atitus.pooavancado.CadUsuario.services.UsuarioService;
 
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/usuarios")
 public class UsuarioController {
-	
+
+
 	@Autowired
-	private UsuarioRespository usuarioRepository;
-	
+	private UsuarioService usuarioService;
+
 	@PostMapping
-	public ResponseEntity<Object> postUsuario(@RequestBody Usuario usuario){
-		usuarioRepository.save(usuario);
+	public ResponseEntity<Object> postUsuario(@RequestBody Usuario usuario) {
+		try {
+			usuarioService.save(usuario);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
 	}
-	
+
 	@GetMapping()
 	public ResponseEntity<Object> getUsuarios(@RequestParam String nome) {
-		List<Usuario> usuarios = usuarioRepository.findByNomeContainingIgnoreCase(nome);
+		List<Usuario> usuarios = usuarioService.findByNome(nome);
 		return ResponseEntity.status(HttpStatus.OK).body(usuarios);
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Object> getUsuariobyId(@PathVariable long id) {
-		Optional<Usuario> usuario  = usuarioRepository.findById(id);
+		Optional<Usuario> usuario = usuarioService.findById(id);
 		if (usuario.isEmpty())
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado com o Id " + id);
 		else
 			return ResponseEntity.status(HttpStatus.OK).body(usuario);
 	}
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<Object> putUsuario(@PathVariable long id, @RequestBody Usuario usuario) {
 		usuario.setId(id);
-		usuarioRepository.save(usuario);
+		try {
+			usuarioService.save(usuario);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		}
 		return ResponseEntity.status(HttpStatus.OK).body(usuario);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> deleteUsuario(@PathVariable long id) {
-		usuarioRepository.deleteById(id);
+		usuarioService.deleteById(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Usuário com Id " + id + " deletado com sucesso!");
 	}
-	
+
 	@PatchMapping("/status/{id}")
 	public ResponseEntity<Object> alteraStatusUsuario(@PathVariable long id) {
-		usuarioRepository.alteraStatusById(id);
+		usuarioService.alteraStatus(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Status alteado com sucesso para o usuario com Id " + id);
 	}
-	
-	
-		
 
 }
