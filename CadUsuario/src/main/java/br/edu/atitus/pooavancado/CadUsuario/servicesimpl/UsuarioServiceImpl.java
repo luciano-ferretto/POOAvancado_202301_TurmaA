@@ -8,15 +8,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.edu.atitus.pooavancado.CadUsuario.Entities.Usuario;
-import br.edu.atitus.pooavancado.CadUsuario.repositories.UsuarioRespository;
+import br.edu.atitus.pooavancado.CadUsuario.repositories.UsuarioRepository;
 import br.edu.atitus.pooavancado.CadUsuario.services.UsuarioService;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService{
 
-	final UsuarioRespository usuarioRepository;
+	final UsuarioRepository usuarioRepository;
 	
-	public UsuarioServiceImpl(UsuarioRespository usuarioRepository) {
+	public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
 		super();
 		this.usuarioRepository = usuarioRepository;
 	}

@@ -11,19 +11,20 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.edu.atitus.pooavancado.CadUsuario.Entities.Usuario;
+import br.edu.atitus.pooavancado.CadUsuario.Entities.Departamento;
+
 
 @Repository
-public interface UsuarioRespository extends JpaRepository<Usuario, Long>{
+public interface DepartamentoRepository extends JpaRepository<Departamento, Long>{
 	
-	@Query(value = "update Usuario set status = not status where id = :ident", nativeQuery = true)
+	@Query(value = "update Departamento set status = not status where id = :ident", nativeQuery = true)
 	@Modifying
 	@Transactional
 	void alteraStatusById(@Param("ident") long id);
 
-	Page<Usuario> findByNomeContainingIgnoreCase(Pageable pageable, String nome);
+	Page<Departamento> findByNomeContainingIgnoreCase(Pageable pageable, String nome);
 	
-	List<Usuario> findByEmailContainingIgnoreCase(String email);
+	List<Departamento> findByEmailContainingIgnoreCase(String email);
 	
 	boolean existsByNomeAndIdNot(String nome, long id);
 }
