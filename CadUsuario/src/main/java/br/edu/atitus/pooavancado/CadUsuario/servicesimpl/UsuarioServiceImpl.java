@@ -1,7 +1,5 @@
 package br.edu.atitus.pooavancado.CadUsuario.servicesimpl;
 
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,15 +19,13 @@ public class UsuarioServiceImpl implements UsuarioService{
 		this.usuarioRepository = usuarioRepository;
 	}
 	
+	@Override
+	public UsuarioRepository getRepository() {
+		return usuarioRepository;
+	}
+	
 	private boolean existsByNomeAndIdNot(String nome, long id) {
 		return usuarioRepository.existsByNomeAndIdNot(nome, id);
-	}
-
-	@Override
-	public Usuario save(Usuario usuario) throws Exception {
-		if (existsByNomeAndIdNot(usuario.getNome(), usuario.getId()))
-			throw new Exception("Já existe usuário com este nome!");
-		return usuarioRepository.save(usuario);
 	}
 
 	@Override
@@ -38,21 +34,9 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 
 	@Override
-	public Optional<Usuario> findById(long id) {
-		return usuarioRepository.findById(id);
-	}
-
-	@Override
-	public void deleteById(long id) {
-		usuarioRepository.deleteById(id);;
-	}
-
-	@Override
 	public void alteraStatus(long id) throws Exception {
 		if (!usuarioRepository.existsById(id))
 			throw new Exception("Não existe usuário com este Id");
 		usuarioRepository.alteraStatusById(id);
 	}
-	
-
 }

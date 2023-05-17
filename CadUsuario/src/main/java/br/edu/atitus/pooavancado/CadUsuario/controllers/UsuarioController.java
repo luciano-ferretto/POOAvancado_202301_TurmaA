@@ -29,10 +29,13 @@ import br.edu.atitus.pooavancado.CadUsuario.services.UsuarioService;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-
-	@Autowired
-	private UsuarioService usuarioService;
+	final UsuarioService usuarioService;
 	
+	public UsuarioController(UsuarioService usuarioService) {
+		super();
+		this.usuarioService = usuarioService;
+	}
+
 	private ResponseEntity<Object> salvar(Usuario usuario) {
 		try {
 			usuarioService.save(usuario);

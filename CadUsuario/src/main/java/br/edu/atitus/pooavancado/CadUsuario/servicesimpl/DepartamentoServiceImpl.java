@@ -20,30 +20,18 @@ public class DepartamentoServiceImpl implements DepartamentoService{
 		this.departamentoRepository = departamentoRepository;
 	}
 	
+	@Override
+	public DepartamentoRepository getRepository() {
+		return departamentoRepository;
+	}
+	
 	private boolean existsByNomeAndIdNot(String nome, long id) {
 		return departamentoRepository.existsByNomeAndIdNot(nome, id);
 	}
 
 	@Override
-	public Departamento save(Departamento departamento) throws Exception {
-		if (existsByNomeAndIdNot(departamento.getNome(), departamento.getId()))
-			throw new Exception("Já existe usuário com este nome!");
-		return departamentoRepository.save(departamento);
-	}
-
-	@Override
 	public Page<Departamento> findByNome(Pageable pageable, String nome) {
 		return departamentoRepository.findByNomeContainingIgnoreCase(pageable, nome);
-	}
-
-	@Override
-	public Optional<Departamento> findById(long id) {
-		return departamentoRepository.findById(id);
-	}
-
-	@Override
-	public void deleteById(long id) {
-		departamentoRepository.deleteById(id);;
 	}
 
 }
