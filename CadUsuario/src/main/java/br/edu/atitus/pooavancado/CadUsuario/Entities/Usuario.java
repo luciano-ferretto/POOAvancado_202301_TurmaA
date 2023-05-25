@@ -1,26 +1,16 @@
 package br.edu.atitus.pooavancado.CadUsuario.Entities;
 
-import java.io.Serializable;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario implements Serializable{
+public class Usuario extends GenericEntity {
 
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	
-	@Column(nullable = false, length = 150)
-	private String nome;
 	
 	@Column(nullable = true, length = 200)
 	private String email;
@@ -28,18 +18,12 @@ public class Usuario implements Serializable{
 	@Column(nullable = false)
 	private boolean status;
 	
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+	@ManyToOne
+	@JoinColumn(nullable = false, name ="id_departamento")
+	private Departamento departamento;
+	
+	
+	
 	public String getEmail() {
 		return email;
 	}
@@ -52,7 +36,12 @@ public class Usuario implements Serializable{
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	
-	
+	public Departamento getDepartamento() {
+		return departamento;
+	}
+	public void setDepartamento(Departamento departamento) {
+		this.departamento = departamento;
+	}
+
 
 }

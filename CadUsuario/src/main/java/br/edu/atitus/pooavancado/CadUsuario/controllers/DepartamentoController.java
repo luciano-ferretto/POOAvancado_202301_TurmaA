@@ -23,58 +23,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.atitus.pooavancado.CadUsuario.Entities.Departamento;
 import br.edu.atitus.pooavancado.CadUsuario.services.DepartamentoService;
+import br.edu.atitus.pooavancado.CadUsuario.services.GenericService;
 
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/departamentos")
-public class DepartamentoController {
+public class DepartamentoController extends GenericController<Departamento>{
 
-
-	@Autowired
-	private DepartamentoService departamentoService;
-	
-	private ResponseEntity<Object> salvar(Departamento departamento) {
-		try {
-			departamentoService.save(departamento);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(departamento);
+	final DepartamentoService departamentoService;
+	public DepartamentoController(DepartamentoService departamentoService) {
+		super();
+		this.departamentoService = departamentoService;
 	}
-	
-	@PostMapping
-	public ResponseEntity<Object> postDepartamento(@RequestBody Departamento departamento) {
-		return salvar(departamento);
-		
-	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<Object> putDepartamento(@PathVariable long id, @RequestBody Departamento departamento) {
-		departamento.setId(id);
-		return salvar(departamento);
+	@Override
+	GenericService<Departamento> getService() {
+		return departamentoService;
 	}
 
-	@GetMapping()
-	public ResponseEntity<Object> getDepartamentos(@PageableDefault(page = 0, size = 5, sort = "id", direction = Direction.ASC) Pageable pageable, @RequestParam String nome) {
-		Page<Departamento> departamentos = departamentoService.findByNome(pageable, nome);
-		return ResponseEntity.status(HttpStatus.OK).body(departamentos);
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<Object> getDepartamentobyId(@PathVariable long id) {
-		Optional<Departamento> departamento = departamentoService.findById(id);
-		if (departamento.isEmpty())
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Departamento não encontrado com o Id " + id);
-		else
-			return ResponseEntity.status(HttpStatus.OK).body(departamento);
-	}
-
-	
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> deleteDepartamento(@PathVariable long id) {
-		departamentoService.deleteById(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Usuário com Id " + id + " deletado com sucesso!");
-	}
 
 }

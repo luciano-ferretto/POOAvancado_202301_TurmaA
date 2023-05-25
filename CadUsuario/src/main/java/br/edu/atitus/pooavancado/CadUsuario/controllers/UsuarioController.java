@@ -22,62 +22,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.atitus.pooavancado.CadUsuario.Entities.Usuario;
+import br.edu.atitus.pooavancado.CadUsuario.services.GenericService;
 import br.edu.atitus.pooavancado.CadUsuario.services.UsuarioService;
 
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/usuarios")
-public class UsuarioController {
+public class UsuarioController extends GenericController<Usuario>{
 
 	final UsuarioService usuarioService;
-	
 	public UsuarioController(UsuarioService usuarioService) {
 		super();
 		this.usuarioService = usuarioService;
 	}
-
-	private ResponseEntity<Object> salvar(Usuario usuario) {
-		try {
-			usuarioService.save(usuario);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(usuario);
-	}
 	
-	@PostMapping
-	public ResponseEntity<Object> postUsuario(@RequestBody Usuario usuario) {
-		return salvar(usuario);
-		
-	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<Object> putUsuario(@PathVariable long id, @RequestBody Usuario usuario) {
-		usuario.setId(id);
-		return salvar(usuario);
-	}
-
-	@GetMapping()
-	public ResponseEntity<Object> getUsuarios(@PageableDefault(page = 0, size = 5, sort = "id", direction = Direction.ASC) Pageable pageable, @RequestParam String nome) {
-		Page<Usuario> usuarios = usuarioService.findByNome(pageable, nome);
-		return ResponseEntity.status(HttpStatus.OK).body(usuarios);
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<Object> getUsuariobyId(@PathVariable long id) {
-		Optional<Usuario> usuario = usuarioService.findById(id);
-		if (usuario.isEmpty())
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado com o Id " + id);
-		else
-			return ResponseEntity.status(HttpStatus.OK).body(usuario);
-	}
-
-	
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> deleteUsuario(@PathVariable long id) {
-		usuarioService.deleteById(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Usuário com Id " + id + " deletado com sucesso!");
+	@Override
+	GenericService<Usuario> getService() {
+		return usuarioService;
 	}
 
 	@PatchMapping("/status/{id}")
@@ -89,5 +50,7 @@ public class UsuarioController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body("Status alteado com sucesso para o usuario com Id " + id);
 	}
+
+	
 
 }
