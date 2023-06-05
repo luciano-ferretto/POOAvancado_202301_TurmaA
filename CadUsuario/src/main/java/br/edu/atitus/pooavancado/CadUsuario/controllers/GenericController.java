@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import br.edu.atitus.pooavancado.CadUsuario.Entities.GenericEntity;
 import br.edu.atitus.pooavancado.CadUsuario.services.GenericService;
@@ -45,18 +46,34 @@ public abstract class GenericController<TEntidade extends GenericEntity> {
 	}
 
 	@GetMapping()
-	public ResponseEntity<Object> getUsuarios(@PageableDefault(page = 0, size = 5, sort = "id", direction = Direction.ASC) Pageable pageable, @RequestParam String nome) {
-		Page<TEntidade> usuarios = getService().findByNome(pageable, nome);
-		return ResponseEntity.status(HttpStatus.OK).body(usuarios);
+	public ResponseEntity<Object> getEntidades(@PageableDefault(page = 0, size = 5, sort = "id", direction = Direction.ASC) Pageable pageable, @RequestParam String nome) throws Exception {
+		Page<TEntidade> entidades = getService().findByNome(pageable, nome);
+		for (TEntidade tEntidade : entidades) {
+			long id = tEntidade.getId();
+			tEntidade.add(linkTo(methodOn(GenericController.class).getEntidadesById(id)).withSelfRel());
+			tEntidade.add(linkTo(methodOn(GenericController.class).putUsuario(id, tEntidade))
+					.withRel("PUT - Alterar"));
+			tEntidade.add(linkTo (methodOn(GenericController.class).deleteUsuario(id)).withRel("DELETE - Remover"));
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(entidades);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Object> getUsuariobyId(@PathVariable long id) throws Exception {
+	public ResponseEntity<Object> getEntidadesById(@PathVariable long id) throws Exception {
 		Optional<TEntidade> entidade = getService().findById(id);
 		if (entidade.isEmpty())
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("TEntidade não encontrado com o Id " + id);
-		else
+		else {
+			
+		      entidade.get().add(linkTo(methodOn(GenericController.class).getEntidadesById(id)).withSelfRel());
+		      entidade.get().add(linkTo(methodOn(GenericController.class).putUsuario(id, entidade.get())).withRel("PUT - Alterar"));
+		      entidade.get().add(linkTo(methodOn(GenericController.class).deleteUsuario(id)).withRel("DELETE - Remover"));
+
+		      // Adiciona o link para retornar à lista de usuários
+		      entidade.get().add(linkTo(GenericController.class).withRel("Lista de Registros"));
+
 			return ResponseEntity.status(HttpStatus.OK).body(entidade);
+		}
 	}
 
 
