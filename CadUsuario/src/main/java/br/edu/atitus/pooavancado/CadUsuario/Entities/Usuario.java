@@ -1,5 +1,10 @@
 package br.edu.atitus.pooavancado.CadUsuario.Entities;
 
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -8,7 +13,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario extends GenericEntity {
+public class Usuario extends GenericEntity implements UserDetails{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -22,7 +27,8 @@ public class Usuario extends GenericEntity {
 	@JoinColumn(nullable = false, name ="id_departamento")
 	private Departamento departamento;
 	
-	
+	@Column(nullable = true)
+	private String password;
 	
 	public String getEmail() {
 		return email;
@@ -41,6 +47,36 @@ public class Usuario extends GenericEntity {
 	}
 	public void setDepartamento(Departamento departamento) {
 		this.departamento = departamento;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 
 
