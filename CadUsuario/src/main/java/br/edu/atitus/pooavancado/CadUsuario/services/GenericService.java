@@ -4,19 +4,21 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.edu.atitus.pooavancado.CadUsuario.Entities.GenericEntity;
-import br.edu.atitus.pooavancado.CadUsuario.Entities.Usuario;
 import br.edu.atitus.pooavancado.CadUsuario.repositories.GenericRepository;
 
 public interface GenericService<TEntidade extends GenericEntity> {
 
 	GenericRepository<TEntidade> getRepository();
 	
-	default TEntidade save(TEntidade objeto) throws Exception {
+	default void validarSave(TEntidade objeto) throws Exception {
 		if (objeto.getNome() == null || objeto.getNome().isEmpty())
 			throw new Exception("É necessário informar um nome");
+	}
+	
+	default TEntidade save(TEntidade objeto) throws Exception {
+		validarSave(objeto);
 		return getRepository().save(objeto);
 	}
 
