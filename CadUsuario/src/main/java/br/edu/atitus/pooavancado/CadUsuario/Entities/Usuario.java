@@ -24,7 +24,7 @@ public class Usuario extends GenericEntity implements UserDetails{
 	private boolean status;
 	
 	@ManyToOne
-	@JoinColumn(nullable = false, name ="id_departamento")
+	@JoinColumn(nullable = true, name ="id_departamento")
 	private Departamento departamento;
 	
 	@Column(nullable = true)
