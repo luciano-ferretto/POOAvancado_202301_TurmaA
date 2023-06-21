@@ -43,9 +43,9 @@ public class UsuarioServiceImpl implements UsuarioService{
 		UsuarioService.super.validarSave(objeto);
 		if (objeto.getPassword().isEmpty())
 			throw new Exception("Password não pode ser vazio");
-		Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (usuarioLogado.getId() != objeto.getId() && usuarioLogado.getDepartamento().getId() != 1)
-			throw new Exception("Você só pode alterar os dados referente a sua conta");
+		//Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		//if (usuarioLogado.getId() != objeto.getId() && usuarioLogado.getDepartamento().getId() != 1)
+		//	throw new Exception("Você só pode alterar os dados referente a sua conta");
 		
 		
 	}
